@@ -1,40 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  --color-primary: #0d9488;
-  --color-on-primary: #ffffff;
-  --color-accent: #ea580c;
-  --color-background: #f0fdfa;
-  --color-foreground: #134e4a;
+  /* Color tokens */
+  --color-primary: #00c2a8;
+  --color-on-primary: #0b0b0b;
+  --color-accent: #ff5a1f;
+  --color-on-accent: #0b0b0b;
+  --color-background: #fff4d6;
+  --color-foreground: #0b0b0b;
   --color-card: #ffffff;
-  --color-card-foreground: #134e4a;
-  --color-muted: #e8f1f4;
-  --color-muted-foreground: #475569;
-  --color-border: #99f6e4;
-  --color-ring: #0d9488;
+  --color-card-foreground: #0b0b0b;
+  --color-muted: #ffe8a3;
+  --color-muted-foreground: #4a4a4a;
+  --color-border: #0b0b0b;
+  --color-ring: #0033ff;
 
+  /* Spacing */
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-6: 24px;
   --space-8: 32px;
 
-  --radius: 12px;
+  /* Shape */
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  /* Neubrutalist structure: thick borders + hard offset shadows (no blur) */
+  --border-width: 3px;
+  --shadow: 4px 4px 0 var(--color-border);
+  --shadow-sm: 3px 3px 0 var(--color-border);
+  --shadow-lift: 6px 6px 0 var(--color-border);
+
+  /* Motion */
+  --transition-fast: 120ms ease-out;
+
+  --font-base: 'Space Grotesk', system-ui, -apple-system, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #0b1413;
-    --color-foreground: #e6fbf8;
-    --color-card: #112220;
-    --color-card-foreground: #e6fbf8;
-    --color-muted: #16302c;
-    --color-muted-foreground: #9cc7c0;
-    --color-border: #1f4a43;
-    --color-primary: #2dd4bf;
-    --color-on-primary: #052e2b;
-    --color-accent: #fb923c;
-    --color-ring: #2dd4bf;
+    --color-background: #0b0b0b;
+    --color-foreground: #fff4d6;
+    --color-card: #1a1a1a;
+    --color-card-foreground: #fff4d6;
+    --color-muted: #262219;
+    --color-muted-foreground: #d8d0b8;
+    --color-border: #fff4d6;
+    --color-primary: #00e6c3;
+    --color-on-primary: #0b0b0b;
+    --color-accent: #ff7a45;
+    --color-on-accent: #0b0b0b;
+    --color-ring: #6e9bff;
   }
 }
 
@@ -47,7 +64,7 @@ body {
   min-height: 100vh;
   background: var(--color-background);
   color: var(--color-foreground);
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-base);
   font-size: 16px;
   line-height: 1.5;
   display: flex;
@@ -66,8 +83,10 @@ body {
 }
 
 .page-header h1 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
   margin: 0 0 var(--space-2);
 }
 
@@ -81,13 +100,14 @@ body {
 .summary-card {
   background: var(--color-card);
   color: var(--color-card-foreground);
-  border: 1px solid var(--color-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius);
+  box-shadow: var(--shadow);
   padding: var(--space-4);
 }
 
 .calendar-card {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
 .calendar-nav {
@@ -99,7 +119,9 @@ body {
 
 .month-label {
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   margin: 0;
 }
 
@@ -109,12 +131,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: none;
-  border-radius: 999px;
+  background: var(--color-card);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
   color: var(--color-foreground);
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .nav-btn svg {
@@ -123,28 +146,35 @@ body {
 }
 
 .nav-btn:hover {
-  background: var(--color-muted);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lift);
+}
+
+.nav-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--color-border);
 }
 
 .nav-btn:focus-visible {
-  outline: 2px solid var(--color-ring);
+  outline: 3px solid var(--color-ring);
   outline-offset: 2px;
 }
 
 .weekday-row {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   text-align: center;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
   color: var(--color-muted-foreground);
   margin-bottom: var(--space-2);
 }
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-2) 6px;
 }
 
 .day-cell {
@@ -160,46 +190,58 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  background: transparent;
-  border: none;
-  border-radius: var(--radius);
+  background: var(--color-card);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
   color: var(--color-card-foreground);
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
 .day-btn:disabled {
   color: var(--color-muted-foreground);
-  opacity: 0.4;
+  background: var(--color-muted);
+  box-shadow: none;
+  border-style: dashed;
   cursor: default;
 }
 
 .day-btn:not(:disabled):hover {
-  background: var(--color-muted);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lift);
 }
 
-.day-btn[aria-pressed="true"]:not(:disabled):hover {
-  background: var(--color-primary);
+.day-btn:not(:disabled):active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--color-border);
 }
 
 .day-btn:focus-visible {
-  outline: 2px solid var(--color-ring);
+  outline: 3px solid var(--color-ring);
   outline-offset: 2px;
 }
 
 .day-btn[aria-pressed="true"] {
   background: var(--color-primary);
   color: var(--color-on-primary);
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--color-border);
+}
+
+.day-btn[aria-pressed="true"]:not(:disabled):hover {
+  background: var(--color-primary);
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--color-border);
 }
 
 .day-btn .check-icon {
   width: 14px;
   height: 14px;
   opacity: 0;
-  transition: opacity 150ms ease;
 }
 
 .day-btn[aria-pressed="true"] .check-icon {
@@ -207,7 +249,17 @@ body {
 }
 
 .day-btn.is-today {
-  box-shadow: inset 0 0 0 2px var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 3px 3px 0 var(--color-accent);
+}
+
+.day-btn.is-today:not(:disabled):hover {
+  box-shadow: 6px 6px 0 var(--color-accent);
+}
+
+.day-btn.is-today[aria-pressed="true"],
+.day-btn.is-today:not(:disabled):active {
+  box-shadow: 0 0 0 var(--color-accent);
 }
 
 .summary-card {
