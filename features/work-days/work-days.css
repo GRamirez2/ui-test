@@ -1,0 +1,293 @@
+/* Work Days calendar — consumes tokens from app/globals.css only. */
+
+.work-days-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-background-grouped);
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 100%;
+  max-width: 440px;
+  padding: var(--space-8) var(--space-4) var(--space-8);
+  padding-left: max(var(--space-4), env(safe-area-inset-left));
+  padding-right: max(var(--space-4), env(safe-area-inset-right));
+}
+
+/* Header — iOS large title */
+
+.page-header {
+  margin-bottom: var(--space-6);
+  padding: 0 var(--space-1);
+}
+
+.page-header h1 {
+  font-size: var(--text-large-title);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.12;
+  margin: 0 0 var(--space-1);
+}
+
+.page-subtitle {
+  margin: 0;
+  color: var(--color-muted-foreground);
+  font-size: var(--text-subhead);
+}
+
+/* Cards — inset grouped */
+
+.calendar-card,
+.summary-card {
+  background: var(--color-card);
+  color: var(--color-card-foreground);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-4);
+}
+
+@media (prefers-color-scheme: dark) {
+  .calendar-card,
+  .summary-card {
+    border-color: var(--color-border);
+  }
+}
+
+.calendar-card {
+  margin-bottom: var(--space-4);
+}
+
+/* Month navigation */
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.month-label {
+  font-size: var(--text-title-3);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+
+.nav-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--color-primary-text);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--transition-fast), transform var(--duration-fast) var(--ease-spring);
+}
+
+.nav-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.nav-btn:hover {
+  background: var(--color-fill);
+}
+
+.nav-btn:active {
+  background: var(--color-fill-hover);
+  transform: scale(var(--scale-pressed));
+}
+
+.nav-btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Calendar grid */
+
+.weekday-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  text-align: center;
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  color: var(--color-muted-foreground);
+  margin-bottom: var(--space-2);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-2) 6px;
+}
+
+.day-cell {
+  aspect-ratio: 1;
+}
+
+.day-btn {
+  width: 100%;
+  height: 100%;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--color-fill);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-card-foreground);
+  font-family: inherit;
+  font-size: var(--text-subhead);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--duration-fast) var(--ease-spring);
+}
+
+.day-btn:disabled {
+  color: var(--color-muted-foreground);
+  background: transparent;
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.day-btn:not(:disabled):hover {
+  background: var(--color-fill-hover);
+}
+
+.day-btn:not(:disabled):active {
+  transform: scale(var(--scale-pressed));
+}
+
+.day-btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.day-btn[aria-pressed="true"] {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.day-btn[aria-pressed="true"]:not(:disabled):hover {
+  background: var(--color-primary-hover);
+}
+
+.day-btn[aria-pressed="true"]:not(:disabled):active {
+  background: var(--color-primary-pressed);
+}
+
+.day-btn .check-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--transition-fast), transform var(--duration-base) var(--ease-spring);
+}
+
+.day-btn[aria-pressed="true"] .check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Today: red numeral + ring (not color alone — ring + weight) */
+.day-btn.is-today {
+  color: var(--color-red);
+  font-weight: var(--weight-bold);
+  box-shadow: inset 0 0 0 2px var(--color-red);
+}
+
+/* Red numeral loses contrast on the darker hover fill; keep the base fill
+   and thicken the ring as the hover cue instead. */
+.day-btn.is-today:not([aria-pressed="true"]):not(:disabled):hover {
+  background: var(--color-fill);
+  box-shadow: inset 0 0 0 3px var(--color-red);
+}
+
+/* Red on blue lacks contrast; switch to an inner white ring when selected */
+.day-btn.is-today[aria-pressed="true"] {
+  color: var(--color-on-primary);
+  box-shadow: inset 0 0 0 2px var(--color-primary), inset 0 0 0 4px var(--color-on-primary);
+}
+
+/* Summary */
+
+.summary-card {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.summary-count {
+  font-size: 1.75rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-primary-text);
+}
+
+.summary-text {
+  font-size: var(--text-subhead);
+  color: var(--color-muted-foreground);
+}
+
+
+/* Skeletons — flat fills (dense grid, so no shimmer). Each keeps the line box
+   of the element it stands in for so nothing shifts when real content mounts. */
+
+.nav-btn-placeholder {
+  width: 44px;
+  height: 44px;
+}
+
+.month-label-skeleton {
+  display: flex;
+  align-items: center;
+  height: calc(var(--text-title-3) * 1.15);
+}
+
+.month-label-skeleton::before {
+  content: '';
+  width: 9em;
+  height: 0.8em;
+  border-radius: var(--space-1);
+  background: var(--color-fill);
+}
+
+.day-skeleton {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--color-fill);
+}
+
+.summary-count-skeleton {
+  display: inline-flex;
+  align-items: center;
+  height: calc(1.75rem * var(--leading-body));
+}
+
+.summary-count-skeleton::before {
+  content: '';
+  width: 1.1em;
+  height: 1.75rem;
+  border-radius: var(--space-1);
+  background: var(--color-fill);
+}
