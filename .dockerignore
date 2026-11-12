@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.claude
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+Dockerfile
+.dockerignore
+compose.yaml
+*.tar
+dist
